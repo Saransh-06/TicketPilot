@@ -1,0 +1,184 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
+import { BookingOutcomeRecord, BookingStatus } from '@/lib/types';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { StatusBadge } from '@/components/ui/StatusBadge';
+import { History, CheckCircle2, XCircle, Clock, AlertCircle, FileText, Info, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+
+export default function BookingHistoryPage() {
+  const [history, setHistory] = useState<BookingOutcomeRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+
+  useEffect(() => {
+    async function loadHistory() {
+      setLoading(true);
+      const res = await api.getBookingHistory();
+      setHistory(res.data || []);
+      setLoading(false);
+    }
+    loadHistory();
+  }, []);
+
+  const filteredHistory = history.filter(item => {
+    if (statusFilter === 'ALL') return true;
+    return item.status === statusFilter;
+  });
+
+  const getStatusIcon = (status: BookingStatus) => {
+    switch (status) {
+      case 'CONFIRMED':
+        return <CheckCircle2 className="w-4 h-4 text-emerald-600" />;
+      case 'FAILED':
+        return <XCircle className="w-4 h-4 text-rose-600" />;
+      case 'IN_PROGRESS':
+        return <Clock className="w-4 h-4 text-amber-600" />;
+      default:
+        return <AlertCircle className="w-4 h-4 text-stone-500" />;
+    }
+  };
+
+  const getStatusBadgeVariant = (status: BookingStatus) => {
+    switch (status) {
+      case 'CONFIRMED': return 'success';
+      case 'FAILED': return 'error';
+      case 'IN_PROGRESS': return 'warning';
+      default: return 'neutral';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <History className="w-5 h-5 text-accent-emerald" />
+            <h1 className="text-2xl font-extrabold text-ink tracking-tight">Booking Outcome History</h1>
+          </div>
+          <p className="text-xs sm:text-sm text-ink-muted">
+            Personal travel records, manually recorded outcomes, and PNR references.
+          </p>
+        </div>
+
+        {/* Filter Controls */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-ink-muted uppercase tracking-wider">Status:</span>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="text-xs bg-white border border-stone-200 rounded-xl px-3 py-2 text-ink font-medium focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+          >
+            <option value="ALL">All Outcomes ({history.length})</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="FAILED">Failed</option>
+            <option value="IN_PROGRESS">In Progress</option>
+          </select>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="p-12 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-3 border-accent-emerald border-t-transparent mb-2" />
+          <p className="text-sm font-medium text-ink">Loading history records...</p>
+        </div>
+      ) : filteredHistory.length === 0 ? (
+        <GlassCard className="text-center py-12">
+          <History className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+          <h3 className="font-bold text-base text-ink">No Booking Records Found</h3>
+          <p className="text-xs text-ink-muted mt-1 max-w-sm mx-auto">
+            {statusFilter !== 'ALL'
+              ? `No records found with status "${statusFilter}". Try resetting the filter.`
+              : 'You haven’t recorded any booking outcomes yet. Outcomes are logged from the Booking Desk.'}
+          </p>
+          <Link
+            href="/booking"
+            className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent-emerald text-white text-xs font-semibold"
+          >
+            <span>Go to Booking Desk</span>
+          </Link>
+        </GlassCard>
+      ) : (
+        <div className="space-y-4">
+          {filteredHistory.map((item) => (
+            <GlassCard key={item.id} depth={1} className="p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 pb-3 border-b border-stone-100">
+                <div className="flex items-center gap-2.5">
+                  {getStatusIcon(item.status)}
+                  <h3 className="font-bold text-base text-ink">
+                    Train #{item.trainNumber} {item.trainName && `(${item.trainName})`}
+                  </h3>
+                  <StatusBadge label={item.travelClass} variant="info" />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <StatusBadge
+                    label={item.status}
+                    variant={getStatusBadgeVariant(item.status)}
+                  />
+                  {item.isManuallyRecorded ? (
+                    <StatusBadge label="Manually Recorded" variant="neutral" hint="Logged by user" />
+                  ) : (
+                    <StatusBadge label="API Verified" variant="success" hint="Verified with Member 2 backend" />
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-stone-600 mb-3">
+                <div>
+                  <span className="text-stone-400 block">Journey Date</span>
+                  <strong className="text-ink">{item.journeyDate}</strong>
+                </div>
+
+                <div>
+                  <span className="text-stone-400 block">10-Digit PNR Reference</span>
+                  {item.pnr ? (
+                    <strong className="text-ink font-mono tracking-wider">{item.pnr}</strong>
+                  ) : (
+                    <span className="text-stone-400 italic">None provided</span>
+                  )}
+                </div>
+
+                <div>
+                  <span className="text-stone-400 block">Logged Timestamp</span>
+                  <span className="text-stone-700">
+                    {new Date(item.recordedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+                  </span>
+                </div>
+              </div>
+
+              {item.proofReference && (
+                <div className="p-2.5 rounded-lg bg-stone-50 border border-stone-200 text-xs mb-3 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-stone-400" />
+                  <span className="text-stone-500">Proof Reference:</span>
+                  <span className="font-mono text-ink font-semibold">{item.proofReference}</span>
+                </div>
+              )}
+
+              {item.notes && (
+                <div className="text-xs text-stone-700 bg-amber-50/50 p-3 rounded-lg border border-amber-100">
+                  <span className="font-semibold text-amber-900 block mb-0.5">User Booking Notes:</span>
+                  <p>{item.notes}</p>
+                </div>
+              )}
+            </GlassCard>
+          ))}
+        </div>
+      )}
+
+      {/* Disclaimers & Ethics */}
+      <div className="p-4 rounded-xl bg-stone-100 border border-stone-200 text-xs text-stone-600 space-y-1.5">
+        <div className="flex items-center gap-2 font-semibold text-ink">
+          <Info className="w-4 h-4 text-stone-500" />
+          <span>Outcome Audit & Verification Boundaries</span>
+        </div>
+        <p className="leading-relaxed">
+          Outcomes listed in this personal travel history reflect manual entries logged by the user or responses recorded from Member 2 SQLite storage. Tatkal Assistant does not perform automated scraping of live IRCTC accounts or infer payment confirmation without user input.
+        </p>
+      </div>
+    </div>
+  );
+}
