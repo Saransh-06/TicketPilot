@@ -23,7 +23,7 @@ This application is built by a four-member engineering team:
 
 | Team Member | Role & Module | Responsibilities & Boundaries |
 |:---|:---|:---|
-| **Member 1 (This Module)** | **Frontend & UI Architecture** | Pages (`/`, `/trips`, `/trains`, `/booking`, `/history`, `/settings`, `/threeui-preview`), forms, UI state, countdown widget, typed API client, demo adapter, accessibility, visual design system. |
+| **Member 1 (This Module)** | **Frontend & UI Architecture** | Pages (`/`, `/trips`, `/trains`, `/booking`, `/history`, `/settings`), forms, UI state, countdown widget, typed API client, demo adapter, accessibility, visual design system. |
 | **Member 2** | **Backend & Persistence** | Express APIs, SQLite database, persistence models, backend validation, data deletion endpoints, and receipt/proof reference storage. |
 | **Member 3** | **Scheduler & Timing Engine** | Authoritative opening-time calculation, train-origin departure date offsets, system notifications, missed-reminder recovery, and scheduling daemon. |
 | **Member 4** | **Comparison & Security QA** | Train timetable data ingestion, quota allocations, multi-objective comparison scoring, recommendation generation, and security checks. |
@@ -42,30 +42,6 @@ Tatkal Assistant is strictly a **preparation tool**. It never promises guarantee
   - Clicking the **"Open Official IRCTC Portal"** button securely launches `https://www.irctc.co.in/` with `rel="noopener noreferrer"`.
   - All credentials and payments are entered by the user directly on the official IRCTC portal.
   - Opening the IRCTC link **never** marks a trip as booked, does not infer payment success, and does not invent confirmed PNRs.
-
----
-
-## 🎨 ThreeUI Component Integration Status
-
-### Registered Component
-- **Component**: `MengToSketchbookLandingPage`
-- **Package**: `@designcodeio/threeui`
-- **Canonical HTML URL**: `https://threeui.com/landing-pages/meng-to-sketchbook.html`
-- **Registered Source Bundle**: `https://threeui.com/source-code/meng-to-sketchbook-landing-page.json`
-- **Provided Source Revision Identifier**: `SHA-256 e0330548b1ac`
-
-### Files Extracted & Maintained
-1. `src/shaders/landing-pages/LandingPages.tsx` (Complete source bundle)
-2. `src/shaders/landing-pages/pageTypography.ts` (Controls & font specifications)
-3. `src/shaders/landing-pages/pageRecipes.ts` (Theme recipes)
-4. `src/shaders/landing-pages/LandingPageFrame.tsx` (Sandboxed iframe frame component)
-5. `public/landing-pages/meng-to-sketchbook.html` (Canonical source HTML)
-6. `src/shaders/threeui.css` (Shared ThreeUI stylesheet)
-
-### Architectural Reconciliation & Isolation Policy
-- The original ThreeUI component depicts a Singapore sketchbook portfolio with landmark illustrations. 
-- In strict adherence to product boundaries, **the original sketchbook template is preserved separately in isolation** (`/threeui-preview`) and is **never** disguised as functional Tatkal railway product content.
-- Template CSS is isolated inside the frame container to avoid polluting functional railway dashboard styles.
 
 ---
 
@@ -128,7 +104,7 @@ npm run dev
 ### Automated Tests
 ```bash
 npm test
-# Runs the full 14-point test suite covering validation, countdowns, sorting, safety, and ThreeUI
+# Runs the 13-point test suite covering validation, countdowns, sorting, and safety boundaries
 ```
 
 ### Production Build
@@ -149,7 +125,6 @@ npm start
 - `/booking` — **Booking Desk**: Interactive checklist, countdown timer, IRCTC portal launcher, and manual booking outcome logger.
 - `/history` — **Booking History**: Chronological log of manual outcomes with status badges and PNR references.
 - `/settings` — **Settings & Privacy**: Travel class preferences, timetable strategy, and local data reset controls.
-- `/threeui-preview` — **ThreeUI Showcase**: Sandboxed iframe preview of `MengToSketchbookLandingPage`.
 
 ---
 

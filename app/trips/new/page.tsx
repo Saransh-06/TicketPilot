@@ -31,21 +31,27 @@ export default function NewTripPage() {
       <div>
         <Link
           href="/trips"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-600 hover:text-ink transition-colors mb-2"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-ink-subtle hover:text-accent-coral transition-colors mb-2"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to My Trips</span>
         </Link>
-        <h1 className="text-2xl font-extrabold text-ink tracking-tight">Configure New Journey</h1>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="section-idx">[02.1 // TRIP.NEW]</span>
+          <span className="text-[10px] font-mono text-ink-subtle uppercase tracking-wider">
+            INITIALIZE SECTOR
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">Configure New Journey</h1>
         <p className="text-xs sm:text-sm text-ink-muted mt-0.5">
           Enter your sector, journey date, and class preferences to calculate Tatkal opening timings.
         </p>
       </div>
 
       <GlassCard depth={2}>
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-stone-200/70">
-          <Train className="w-5 h-5 text-accent-emerald" />
-          <h2 className="font-bold text-base text-ink">Journey Configuration Details</h2>
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/8">
+          <Train className="w-5 h-5 text-accent-coral" />
+          <h2 className="font-bold text-sm sm:text-base text-ink">Journey Configuration Details</h2>
         </div>
 
         <TripForm
@@ -56,10 +62,10 @@ export default function NewTripPage() {
         />
       </GlassCard>
 
-      <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
-        <ShieldCheck className="w-4 h-4 text-amber-800 shrink-0 mt-0.5" />
-        <div className="leading-relaxed">
-          <strong>Tatkal Quota Rule:</strong> AC Tatkal booking opens at 10:00 AM IST and Non-AC opens at 11:00 AM IST, exactly one day prior to journey departure from the train&apos;s origin station. If your train departs its originating station a day earlier, Tatkal opens accordingly.
+      <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200 flex items-start gap-3">
+        <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+        <div className="leading-relaxed font-mono text-[11px] text-amber-200/90">
+          <strong className="text-amber-300">Tatkal Quota Rule:</strong> AC Tatkal booking opens at 10:00 AM IST and Non-AC opens at 11:00 AM IST, exactly one day prior to journey departure from the train&apos;s origin station. If your train departs its originating station a day earlier, Tatkal opens accordingly.
         </div>
       </div>
     </div>

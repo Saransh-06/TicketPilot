@@ -25,18 +25,18 @@ export function StatusBadge({
   className = '',
 }: StatusBadgeProps) {
   const variantStyles: Record<BadgeVariant, string> = {
-    success: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
-    warning: 'bg-amber-50 text-amber-900 border-amber-200/80',
-    error: 'bg-rose-50 text-rose-800 border-rose-200/80',
-    info: 'bg-sky-50 text-sky-800 border-sky-200/80',
-    neutral: 'bg-stone-100 text-stone-700 border-stone-200',
-    ac: 'bg-emerald-900 text-emerald-100 border-emerald-800',
-    nonac: 'bg-amber-900 text-amber-100 border-amber-800',
+    success: 'bg-emerald-500/12 text-emerald-400 border-emerald-500/20',
+    warning: 'bg-amber-500/12 text-amber-400 border-amber-500/20',
+    error: 'bg-red-500/12 text-red-400 border-red-500/20',
+    info: 'bg-sky-500/12 text-sky-400 border-sky-500/20',
+    neutral: 'bg-white/5 text-ink-muted border-white/10',
+    ac: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
+    nonac: 'bg-amber-500/15 text-amber-300 border-amber-500/25',
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${variantStyles[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[0.6875rem] font-mono font-medium border tracking-wide ${variantStyles[variant]} ${className}`}
       title={hint}
       role="status"
     >

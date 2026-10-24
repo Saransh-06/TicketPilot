@@ -69,13 +69,16 @@ export default function CompareTrainsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/8">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Layers className="w-5 h-5 text-accent-emerald" />
-            <h1 className="text-2xl font-extrabold text-ink tracking-tight">Train Timetable & Fare Comparison</h1>
+            <span className="section-idx">[03 // TIMETABLES]</span>
+            <span className="text-[10px] font-mono text-ink-subtle uppercase tracking-wider">
+              MEMBER 4 SCORING ENGINE
+            </span>
           </div>
-          <p className="text-xs sm:text-sm text-ink-muted">
+          <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">Train Timetable & Fare Comparison</h1>
+          <p className="text-xs sm:text-sm text-ink-muted mt-0.5">
             Authorized schedule data and recommendation explanations powered by Member 4 Comparison Engine.
           </p>
         </div>
@@ -83,14 +86,14 @@ export default function CompareTrainsPage() {
         {/* Sector Switcher */}
         {trips.length > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-ink-muted uppercase tracking-wider">Sector:</span>
+            <span className="text-[10px] font-mono font-bold text-ink-subtle uppercase tracking-widest">SECTOR:</span>
             <select
               value={selectedTripId}
               onChange={(e) => handleTripChange(e.target.value)}
-              className="text-xs bg-white border border-stone-200 rounded-xl px-3 py-2 text-ink font-medium focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+              className="text-xs bg-surface-elevated border border-white/10 rounded-xl px-3 py-2 text-ink font-mono font-medium focus:outline-none focus:ring-1 focus:ring-accent-coral"
             >
               {trips.map(t => (
-                <option key={t.id} value={t.id}>
+                <option key={t.id} value={t.id} className="bg-surface text-ink">
                   {t.sourceStation.split('-')[0].trim()} → {t.destStation.split('-')[0].trim()} ({t.travelClass})
                 </option>
               ))}
@@ -100,10 +103,10 @@ export default function CompareTrainsPage() {
       </div>
 
       {/* Comparison Sector Banner */}
-      <div className="p-4 rounded-xl bg-white/80 border border-stone-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="p-4 rounded-xl bg-surface/80 border border-white/8 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div>
-          <span className="text-stone-500 uppercase tracking-wider font-semibold block text-[10px]">Active Route</span>
-          <strong className="text-sm text-ink font-bold">
+          <span className="text-ink-subtle uppercase tracking-wider font-mono font-semibold block text-[10px]">Active Route Sector</span>
+          <strong className="text-sm sm:text-base text-ink font-bold tracking-tight">
             {currentTrip.sourceStation} → {currentTrip.destStation}
           </strong>
         </div>
@@ -124,12 +127,12 @@ export default function CompareTrainsPage() {
       />
 
       {/* Data Provenance & Ethics Disclosure */}
-      <GlassCard className="text-xs text-stone-600 space-y-2">
+      <GlassCard className="text-xs text-ink-muted space-y-2">
         <div className="flex items-center gap-2 font-semibold text-ink">
-          <ShieldAlert className="w-4 h-4 text-emerald-700" />
+          <ShieldAlert className="w-4 h-4 text-accent-coral" />
           <span>Data Provenance & IRCTC Compliance Notice</span>
         </div>
-        <p className="leading-relaxed">
+        <p className="leading-relaxed font-mono text-[11px] text-ink-subtle">
           Timetables, run times, and base fares are synchronized from official railway schedule disclosures. Tatkal seat allocations and waitlist statuses are estimates based on standard Indian Railways zonal quotas. This application does not claim live real-time seat locks and never overrides IRCTC official availability.
         </p>
       </GlassCard>

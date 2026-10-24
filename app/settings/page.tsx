@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { UserSettings, TravelClass, PreferenceChoice } from '@/lib/types';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { Settings, Shield, Bell, Eye, Trash2, CheckCircle, RotateCcw, AlertTriangle, Info } from 'lucide-react';
+import { Settings, Shield, Bell, Eye, Trash2, CheckCircle, RotateCcw, AlertTriangle, Info, Sliders } from 'lucide-react';
 
 const ALL_CLASSES: { code: TravelClass; label: string }[] = [
   { code: '1A', label: '1A - First AC' },
@@ -73,8 +73,8 @@ export default function SettingsPage() {
   if (loading || !settings) {
     return (
       <div className="p-12 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-3 border-accent-emerald border-t-transparent mb-2" />
-        <p className="text-sm font-medium text-ink">Loading application settings...</p>
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-2 border-accent-coral border-t-transparent mb-2" />
+        <p className="text-sm font-mono text-ink">Loading application settings...</p>
       </div>
     );
   }
@@ -82,34 +82,40 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <div className="pb-2 border-b border-stone-200/60">
+      <div className="pb-4 border-b border-white/8">
         <div className="flex items-center gap-2 mb-1">
-          <Settings className="w-5 h-5 text-accent-emerald" />
-          <h1 className="text-2xl font-extrabold text-ink tracking-tight">Application Preferences & Privacy</h1>
+          <span className="section-idx">[06 // CONFIG.SYS]</span>
+          <span className="text-[10px] font-mono text-ink-subtle uppercase tracking-wider">
+            PARAMETERS & PRIVACY
+          </span>
         </div>
-        <p className="text-xs sm:text-sm text-ink-muted">
+        <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">Application Preferences & Privacy</h1>
+        <p className="text-xs sm:text-sm text-ink-muted mt-0.5">
           Configure default travel filters, display options, and review system privacy boundaries.
         </p>
       </div>
 
       {saveSuccess && (
-        <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-emerald-600" />
+        <div className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 text-xs font-mono flex items-center gap-2">
+          <CheckCircle className="w-4 h-4 text-accent-emerald" />
           <span>Preferences updated and saved to client storage.</span>
         </div>
       )}
 
       {resetMessage && (
-        <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-2">
-          <RotateCcw className="w-4 h-4 text-amber-600 animate-spin" />
+        <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-500/40 text-amber-200 text-xs font-mono flex items-center gap-2">
+          <RotateCcw className="w-4 h-4 text-amber-400 animate-spin" />
           <span>{resetMessage}</span>
         </div>
       )}
 
       {/* 1. Travel Class Preferences */}
       <GlassCard depth={1}>
-        <h2 className="font-bold text-base text-ink mb-1">Preferred Travel Classes</h2>
-        <p className="text-xs text-ink-muted mb-4">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="section-idx">[06.1 // CLASSES]</span>
+          <h2 className="font-bold text-sm sm:text-base text-ink">Preferred Travel Classes</h2>
+        </div>
+        <p className="text-xs text-ink-muted mb-4 font-mono">
           Select classes to prioritize on the comparison and train recommendation dashboard.
         </p>
 
@@ -121,14 +127,14 @@ export default function SettingsPage() {
                 key={cls.code}
                 type="button"
                 onClick={() => handleClassToggle(cls.code)}
-                className={`p-3 rounded-xl border text-left text-xs font-medium transition-all ${
+                className={`p-3 rounded-xl border text-left text-xs font-mono font-medium transition-all ${
                   isSelected
-                    ? 'bg-accent-emerald text-white border-accent-emerald shadow-2xs'
-                    : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
+                    ? 'bg-accent-coral/20 text-accent-coral border-accent-coral/40 shadow-glow-orange'
+                    : 'bg-surface-elevated text-ink-muted hover:text-ink hover:bg-surface-elevated/80 border-white/8'
                 }`}
               >
-                <span className="font-bold block">{cls.code}</span>
-                <span className="text-[11px] opacity-80 block truncate">{cls.label.split('-')[1]?.trim()}</span>
+                <span className="font-bold block text-sm">{cls.code}</span>
+                <span className="text-[11px] opacity-75 block truncate">{cls.label.split('-')[1]?.trim()}</span>
               </button>
             );
           })}
@@ -137,8 +143,11 @@ export default function SettingsPage() {
 
       {/* 2. Default Comparison Strategy */}
       <GlassCard depth={1}>
-        <h2 className="font-bold text-base text-ink mb-1">Default Timetable Preference</h2>
-        <p className="text-xs text-ink-muted mb-4">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="section-idx">[06.2 // STRATEGY]</span>
+          <h2 className="font-bold text-sm sm:text-base text-ink">Default Timetable Preference</h2>
+        </div>
+        <p className="text-xs text-ink-muted mb-4 font-mono">
           Determines initial sorting and highlight focus when comparing trains.
         </p>
 
@@ -150,14 +159,14 @@ export default function SettingsPage() {
                 key={pref}
                 type="button"
                 onClick={() => setSettings({ ...settings, defaultPreference: pref })}
-                className={`p-3.5 rounded-xl border text-left transition-all ${
+                className={`p-4 rounded-xl border text-left transition-all ${
                   isSelected
-                    ? 'bg-emerald-50 border-accent-emerald text-emerald-950 ring-1 ring-accent-emerald'
-                    : 'bg-white hover:bg-stone-50 border-stone-200 text-stone-700'
+                    ? 'bg-accent-coral/15 border-accent-coral/40 text-ink shadow-glow-orange'
+                    : 'bg-surface-elevated border-white/8 text-ink-muted hover:text-ink'
                 }`}
               >
-                <strong className="block text-xs font-bold capitalize text-ink mb-0.5">{pref}</strong>
-                <span className="text-[11px] text-stone-500 block">
+                <strong className="block text-xs font-mono font-bold uppercase tracking-wider text-accent-coral mb-1">{pref}</strong>
+                <span className="text-[11px] text-ink-subtle block font-mono leading-relaxed">
                   {pref === 'balanced' && 'Equal weighting between travel duration and total fare.'}
                   {pref === 'fastest' && 'Sort strictly by shortest journey run time.'}
                   {pref === 'cheapest' && 'Sort strictly by lowest total Tatkal fare.'}
@@ -170,16 +179,19 @@ export default function SettingsPage() {
 
       {/* 3. Display & Notification Preferences */}
       <GlassCard depth={1}>
-        <h2 className="font-bold text-base text-ink mb-1">Display & Scheduler Integration</h2>
-        <p className="text-xs text-ink-muted mb-4">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="section-idx">[06.3 // DISPLAY]</span>
+          <h2 className="font-bold text-sm sm:text-base text-ink">Display & Scheduler Integration</h2>
+        </div>
+        <p className="text-xs text-ink-muted mb-4 font-mono">
           Control visual precision and notification readiness.
         </p>
 
         <div className="space-y-4">
-          <label className="flex items-center justify-between p-3 rounded-xl bg-white/70 border border-stone-200 cursor-pointer">
+          <label className="flex items-center justify-between p-3.5 rounded-xl bg-surface-elevated/60 border border-white/8 cursor-pointer">
             <div>
-              <span className="text-xs font-bold text-ink block">High-Precision Countdown Seconds</span>
-              <span className="text-[11px] text-stone-500 block">
+              <span className="text-xs font-bold text-ink block font-mono">High-Precision Countdown Seconds</span>
+              <span className="text-[11px] text-ink-subtle block font-mono">
                 Renders ticking second digits in the countdown widget.
               </span>
             </div>
@@ -187,20 +199,20 @@ export default function SettingsPage() {
               type="checkbox"
               checked={settings.enableCountdownSeconds}
               onChange={(e) => setSettings({ ...settings, enableCountdownSeconds: e.target.checked })}
-              className="w-4 h-4 text-accent-emerald rounded focus:ring-accent-emerald"
+              className="w-4 h-4 text-accent-coral rounded focus:ring-accent-coral accent-orange-500"
             />
           </label>
 
           {/* Scheduler push notifications with clear Member 3 ownership explanation */}
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs">
+          <div className="p-3.5 rounded-xl bg-surface-elevated/40 border border-white/8 text-xs">
             <div className="flex items-center justify-between mb-1.5">
               <div className="flex items-center gap-2">
-                <Bell className="w-4 h-4 text-stone-500" />
-                <span className="font-bold text-ink">Scheduler Notification Daemon</span>
+                <Bell className="w-4 h-4 text-accent-coral" />
+                <span className="font-bold text-ink font-mono">Scheduler Notification Daemon</span>
               </div>
               <StatusBadge label="Pending Member 3 Daemon" variant="warning" />
             </div>
-            <p className="text-stone-600 text-[11px] leading-relaxed">
+            <p className="text-ink-subtle text-[11px] font-mono leading-relaxed">
               Authoritative desktop push notifications and missed-reminder recovery are governed by the Member 3 background scheduler module. Once Member 3 deploys the notification service worker, alerts will trigger at T-15m, T-5m, and T-1m.
             </p>
           </div>
@@ -208,19 +220,19 @@ export default function SettingsPage() {
       </GlassCard>
 
       {/* 4. Privacy & Data Deletion */}
-      <GlassCard depth={1} className="border-rose-100 bg-rose-50/20">
-        <div className="flex items-center gap-2 text-rose-900 font-bold mb-1">
+      <GlassCard depth={1} className="border-red-500/20 bg-red-950/15">
+        <div className="flex items-center gap-2 text-red-400 font-bold mb-1">
           <Shield className="w-4 h-4" />
-          <h2>Privacy Principles & Data Controls</h2>
+          <h2 className="text-sm sm:text-base font-mono">Privacy Principles & Data Controls</h2>
         </div>
-        <p className="text-xs text-stone-600 mb-4 leading-relaxed">
+        <p className="text-xs text-ink-muted mb-4 leading-relaxed font-mono">
           Tatkal Assistant stores journey profiles and manual booking logs exclusively in local client memory and SQLite (when connected to Member 2). We never transmit passenger IDs, banking details, or IRCTC passwords.
         </p>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-stone-200/60">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/8">
           <div>
-            <span className="text-xs font-bold text-ink block">Reset Client Demo Data</span>
-            <span className="text-[11px] text-stone-500 block">
+            <span className="text-xs font-bold text-ink block font-mono">Reset Client Demo Data</span>
+            <span className="text-[11px] text-ink-subtle block font-mono">
               Clears all local storage trips, booking history logs, and restores default seed data.
             </span>
           </div>
@@ -228,7 +240,7 @@ export default function SettingsPage() {
           <button
             type="button"
             onClick={handleResetData}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-500/30 text-xs font-mono font-semibold transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Demo Storage</span>
@@ -242,7 +254,7 @@ export default function SettingsPage() {
           type="button"
           onClick={handleSave}
           disabled={isSaving}
-          className="px-6 py-2.5 rounded-xl bg-accent-emerald hover:bg-emerald-800 text-white font-semibold text-xs shadow-sm transition-all focus:ring-2 focus:ring-accent-emerald disabled:opacity-50"
+          className="px-6 py-2.5 rounded-xl bg-accent-coral hover:bg-orange-600 text-white font-mono font-bold text-xs shadow-glow-orange transition-all focus:ring-2 focus:ring-accent-coral disabled:opacity-50"
         >
           {isSaving ? 'Saving Preferences...' : 'Save All Preferences'}
         </button>

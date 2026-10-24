@@ -125,8 +125,8 @@ export function TripForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {formError && (
-        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm flex items-start gap-2">
-          <AlertCircle className="w-5 h-5 text-rose-700 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-sm flex items-start gap-2.5">
+          <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
           <span>{formError}</span>
         </div>
       )}
@@ -134,7 +134,7 @@ export function TripForm({
       {/* Origin & Destination Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="sourceStation" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="sourceStation" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Origin Station *
           </label>
           <input
@@ -147,8 +147,8 @@ export function TripForm({
               setSourceStation(e.target.value);
               if (fieldErrors.sourceStation) setFieldErrors(prev => ({ ...prev, sourceStation: '' }));
             }}
-            className={`w-full text-sm bg-white border rounded-xl px-3.5 py-2.5 text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald ${
-              fieldErrors.sourceStation ? 'border-rose-400 ring-1 ring-rose-300' : 'border-stone-200'
+            className={`w-full text-sm bg-surface-elevated/70 border rounded-xl px-3.5 py-2.5 text-ink placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral ${
+              fieldErrors.sourceStation ? 'border-red-400/80 ring-1 ring-red-400/30' : 'border-white/10'
             }`}
             required
             aria-invalid={!!fieldErrors.sourceStation}
@@ -158,12 +158,12 @@ export function TripForm({
             {POPULAR_STATIONS.map(s => <option key={s} value={s} />)}
           </datalist>
           {fieldErrors.sourceStation && (
-            <p id="sourceStation-error" className="text-xs text-rose-600 mt-1">{fieldErrors.sourceStation}</p>
+            <p id="sourceStation-error" className="text-xs font-mono text-red-400 mt-1">{fieldErrors.sourceStation}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="destStation" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="destStation" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Destination Station *
           </label>
           <input
@@ -176,8 +176,8 @@ export function TripForm({
               setDestStation(e.target.value);
               if (fieldErrors.destStation) setFieldErrors(prev => ({ ...prev, destStation: '' }));
             }}
-            className={`w-full text-sm bg-white border rounded-xl px-3.5 py-2.5 text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald ${
-              fieldErrors.destStation ? 'border-rose-400 ring-1 ring-rose-300' : 'border-stone-200'
+            className={`w-full text-sm bg-surface-elevated/70 border rounded-xl px-3.5 py-2.5 text-ink placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral ${
+              fieldErrors.destStation ? 'border-red-400/80 ring-1 ring-red-400/30' : 'border-white/10'
             }`}
             required
             aria-invalid={!!fieldErrors.destStation}
@@ -187,7 +187,7 @@ export function TripForm({
             {POPULAR_STATIONS.map(s => <option key={s} value={s} />)}
           </datalist>
           {fieldErrors.destStation && (
-            <p id="destStation-error" className="text-xs text-rose-600 mt-1">{fieldErrors.destStation}</p>
+            <p id="destStation-error" className="text-xs font-mono text-red-400 mt-1">{fieldErrors.destStation}</p>
           )}
         </div>
       </div>
@@ -195,52 +195,50 @@ export function TripForm({
       {/* Journey Date & Class Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label htmlFor="journeyDate" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="journeyDate" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Journey Date *
           </label>
-          <div className="relative">
-            <input
-              id="journeyDate"
-              type="date"
-              value={journeyDate}
-              onChange={(e) => {
-                setJourneyDate(e.target.value);
-                if (fieldErrors.journeyDate) setFieldErrors(prev => ({ ...prev, journeyDate: '' }));
-              }}
-              className={`w-full text-sm bg-white border rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-emerald ${
-                fieldErrors.journeyDate ? 'border-rose-400 ring-1 ring-rose-300' : 'border-stone-200'
-              }`}
-              required
-              aria-invalid={!!fieldErrors.journeyDate}
-              aria-describedby={fieldErrors.journeyDate ? 'journeyDate-error' : undefined}
-            />
-          </div>
+          <input
+            id="journeyDate"
+            type="date"
+            value={journeyDate}
+            onChange={(e) => {
+              setJourneyDate(e.target.value);
+              if (fieldErrors.journeyDate) setFieldErrors(prev => ({ ...prev, journeyDate: '' }));
+            }}
+            className={`w-full text-sm bg-surface-elevated/70 border rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral ${
+              fieldErrors.journeyDate ? 'border-red-400/80 ring-1 ring-red-400/30' : 'border-white/10'
+            }`}
+            required
+            aria-invalid={!!fieldErrors.journeyDate}
+            aria-describedby={fieldErrors.journeyDate ? 'journeyDate-error' : undefined}
+          />
           {fieldErrors.journeyDate && (
-            <p id="journeyDate-error" className="text-xs text-rose-600 mt-1">{fieldErrors.journeyDate}</p>
+            <p id="journeyDate-error" className="text-xs font-mono text-red-400 mt-1">{fieldErrors.journeyDate}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="travelClass" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="travelClass" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Travel Class *
           </label>
           <select
             id="travelClass"
             value={travelClass}
             onChange={(e) => setTravelClass(e.target.value as TravelClass)}
-            className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+            className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
           >
             {TRAVEL_CLASSES.map(tc => (
-              <option key={tc.code} value={tc.code}>{tc.label}</option>
+              <option key={tc.code} value={tc.code} className="bg-surface text-ink">{tc.label}</option>
             ))}
           </select>
-          <p className="text-[11px] text-stone-500 mt-1">
-            {selectedClassMeta?.isAC ? 'Opens at 10:00 AM IST (AC Quota)' : 'Opens at 11:00 AM IST (Non-AC Quota)'}
+          <p className="text-[11px] font-mono text-ink-subtle mt-1.5">
+            {selectedClassMeta?.isAC ? '⚡ Opens at 10:00 AM IST (AC Quota)' : '⚡ Opens at 11:00 AM IST (Non-AC Quota)'}
           </p>
         </div>
 
         <div>
-          <label htmlFor="passengerCount" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="passengerCount" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Passenger Count (1-4) *
           </label>
           <input
@@ -253,23 +251,23 @@ export function TripForm({
               setPassengerCount(parseInt(e.target.value, 10) || 1);
               if (fieldErrors.passengerCount) setFieldErrors(prev => ({ ...prev, passengerCount: '' }));
             }}
-            className={`w-full text-sm bg-white border rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-emerald ${
-              fieldErrors.passengerCount ? 'border-rose-400 ring-1 ring-rose-300' : 'border-stone-200'
+            className={`w-full text-sm bg-surface-elevated/70 border rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral ${
+              fieldErrors.passengerCount ? 'border-red-400/80 ring-1 ring-red-400/30' : 'border-white/10'
             }`}
             required
             aria-invalid={!!fieldErrors.passengerCount}
             aria-describedby={fieldErrors.passengerCount ? 'passengerCount-error' : undefined}
           />
           {fieldErrors.passengerCount && (
-            <p id="passengerCount-error" className="text-xs text-rose-600 mt-1">{fieldErrors.passengerCount}</p>
+            <p id="passengerCount-error" className="text-xs font-mono text-red-400 mt-1">{fieldErrors.passengerCount}</p>
           )}
         </div>
       </div>
 
       {/* Optional Preferences Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-stone-200/60">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-3 border-t border-white/8">
         <div>
-          <label htmlFor="preferredTrainNumber" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="preferredTrainNumber" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Preferred Train No. (Optional)
           </label>
           <input
@@ -278,12 +276,12 @@ export function TripForm({
             placeholder="e.g. 12952"
             value={preferredTrainNumber}
             onChange={(e) => setPreferredTrainNumber(e.target.value)}
-            className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-ink font-mono placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+            className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3.5 py-2.5 text-ink font-mono placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
           />
         </div>
 
         <div>
-          <label htmlFor="preferredTrainName" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="preferredTrainName" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Preferred Train Name (Optional)
           </label>
           <input
@@ -292,39 +290,39 @@ export function TripForm({
             placeholder="e.g. Mumbai Rajdhani"
             value={preferredTrainName}
             onChange={(e) => setPreferredTrainName(e.target.value)}
-            className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+            className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3.5 py-2.5 text-ink placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
           />
         </div>
 
         <div>
-          <label htmlFor="fareVsDuration" className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+          <label htmlFor="fareVsDuration" className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Comparison Preference
           </label>
           <select
             id="fareVsDuration"
             value={fareVsDurationPreference}
             onChange={(e) => setFareVsDurationPreference(e.target.value as PreferenceChoice)}
-            className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+            className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3.5 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
           >
-            <option value="balanced">Balanced (Fare & Duration)</option>
-            <option value="fastest">Fastest Travel Time</option>
-            <option value="cheapest">Lowest Fare Tier</option>
+            <option value="balanced" className="bg-surface text-ink">Balanced (Fare & Duration)</option>
+            <option value="fastest" className="bg-surface text-ink">Fastest Travel Time</option>
+            <option value="cheapest" className="bg-surface text-ink">Lowest Fare Tier</option>
           </select>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/8">
         <a
           href={cancelHref}
-          className="px-4 py-2.5 rounded-xl border border-stone-200 text-stone-700 hover:bg-stone-50 text-sm font-medium transition-colors"
+          className="px-4 py-2.5 rounded-xl border border-white/10 text-ink-muted hover:text-ink hover:bg-white/5 text-xs font-mono font-medium transition-colors"
         >
           Cancel
         </a>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2.5 rounded-xl bg-accent-emerald hover:bg-emerald-800 text-white font-semibold text-sm flex items-center gap-2 shadow-sm transition-all focus:ring-2 focus:ring-accent-emerald focus:ring-offset-2 disabled:opacity-50"
+          className="px-6 py-2.5 rounded-xl bg-accent-coral hover:bg-orange-600 text-white font-bold text-xs flex items-center gap-2 shadow-glow-orange transition-all focus:ring-2 focus:ring-accent-coral focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
           <span>{isSubmitting ? 'Saving...' : submitButtonText}</span>

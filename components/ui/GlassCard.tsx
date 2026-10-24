@@ -21,7 +21,7 @@ export function GlassCard({
   return (
     <div
       id={id}
-      className={`${interactiveClass} ${depthClass} p-5 md:p-6 text-ink ${className}`}
+      className={`${interactiveClass} ${depthClass} p-5 md:p-6 text-ink relative ${className}`}
     >
       {children}
     </div>

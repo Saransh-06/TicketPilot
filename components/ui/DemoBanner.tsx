@@ -24,22 +24,22 @@ export function DemoBanner() {
     <div
       role="region"
       aria-label="Application mode banner"
-      className="w-full bg-amber-50/90 backdrop-blur-md border-b border-amber-200/80 text-amber-950 px-4 py-2 text-xs"
+      className="w-full bg-amber-500/8 backdrop-blur-md border-b border-amber-500/15 text-amber-200 px-4 py-2 text-xs"
     >
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {isDemo ? (
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-200/90 font-semibold text-amber-900 border border-amber-300">
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/15 font-mono font-semibold text-amber-300 border border-amber-500/25 text-[0.625rem] tracking-wider">
               <Database className="w-3.5 h-3.5" aria-hidden="true" />
               DEMO MODE ACTIVE
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-200/90 font-semibold text-emerald-900 border border-emerald-300">
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/15 font-mono font-semibold text-emerald-300 border border-emerald-500/25 text-[0.625rem] tracking-wider">
               <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
               CONNECTED TO MEMBER 2 BACKEND
             </span>
           )}
-          <span className="text-stone-700">
+          <span className="text-ink-muted">
             {isDemo
               ? 'Using client-side transparent demo storage. Official IRCTC booking is user-controlled; no live booking credentials or bank secrets are ever collected.'
               : 'Production API active. Member 2 Express & SQLite endpoints in use.'}
@@ -49,7 +49,7 @@ export function DemoBanner() {
         <div className="flex items-center gap-3">
           <a
             href="/settings"
-            className="underline hover:text-amber-900 font-medium focus-visible:ring-1 focus-visible:ring-amber-800"
+            className="underline hover:text-amber-300 font-medium focus-visible:ring-1 focus-visible:ring-amber-500 text-amber-400"
           >
             Review Mode Settings
           </a>
@@ -57,7 +57,7 @@ export function DemoBanner() {
             <button
               onClick={handleReset}
               disabled={resetting}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white hover:bg-amber-100 text-stone-800 border border-amber-300 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-ink-muted border border-white/10 transition-colors text-[0.6875rem] font-mono"
               title="Reset all demo trips and history back to factory seed"
             >
               <RotateCcw className={`w-3 h-3 ${resetting ? 'animate-spin' : ''}`} aria-hidden="true" />

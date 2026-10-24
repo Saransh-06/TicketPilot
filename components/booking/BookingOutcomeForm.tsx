@@ -73,15 +73,15 @@ export function BookingOutcomeForm({
 
   if (submitSuccess) {
     return (
-      <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 text-center">
-        <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-        <h4 className="font-bold text-base">Booking Outcome Recorded Successfully</h4>
-        <p className="text-xs text-emerald-800 mt-1 max-w-md mx-auto">
+      <div className="p-6 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 text-center">
+        <CheckCircle2 className="w-10 h-10 text-accent-emerald mx-auto mb-2" />
+        <h4 className="font-bold text-base text-ink">Booking Outcome Recorded Successfully</h4>
+        <p className="text-xs text-ink-muted mt-1 max-w-md mx-auto font-mono">
           Your outcome has been saved to your local Booking History. You can view or audit it at any time in the Booking History tab.
         </p>
         <button
           onClick={() => setSubmitSuccess(false)}
-          className="mt-4 px-4 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium transition-colors"
+          className="mt-4 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-medium transition-colors"
         >
           Record Another Outcome
         </button>
@@ -92,34 +92,34 @@ export function BookingOutcomeForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {errorMessage && (
-        <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 text-rose-700 shrink-0 mt-0.5" />
+        <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       {/* Outcome Status Selector */}
       <div>
-        <label className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+        <label className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
           Booking Outcome Status *
         </label>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value as BookingStatus)}
-          className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+          className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3 py-2.5 text-ink focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral font-mono"
           required
         >
-          <option value="CONFIRMED">Confirmed Ticket</option>
-          <option value="IN_PROGRESS">In Progress / Awaiting Payment Resolution</option>
-          <option value="FAILED">Failed / Quota Exhausted / Gateway Timeout</option>
-          <option value="UNKNOWN">Unknown / Not Completed</option>
-          <option value="NOT_STARTED">Not Started</option>
+          <option value="CONFIRMED" className="bg-surface text-ink">Confirmed Ticket</option>
+          <option value="IN_PROGRESS" className="bg-surface text-ink">In Progress / Awaiting Payment Resolution</option>
+          <option value="FAILED" className="bg-surface text-ink">Failed / Quota Exhausted / Gateway Timeout</option>
+          <option value="UNKNOWN" className="bg-surface text-ink">Unknown / Not Completed</option>
+          <option value="NOT_STARTED" className="bg-surface text-ink">Not Started</option>
         </select>
       </div>
 
       {/* PNR Field (only for manual entry) */}
       <div>
-        <label className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+        <label className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
           10-Digit PNR Number (Optional)
         </label>
         <input
@@ -127,17 +127,17 @@ export function BookingOutcomeForm({
           placeholder="e.g. 284-9182371 or 2849182371"
           value={pnr}
           onChange={(e) => setPnr(e.target.value)}
-          className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3 py-2 font-mono text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+          className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3 py-2.5 font-mono text-ink placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
           maxLength={12}
         />
-        <p className="text-[11px] text-stone-500 mt-1">
+        <p className="text-[11px] font-mono text-ink-subtle mt-1">
           Manually recorded for your personal travel logs. Never shared with unauthorized third parties.
         </p>
       </div>
 
       {/* Proof Reference (alphanumeric transaction or receipt ID) */}
       <div>
-        <label className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+        <label className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
           Proof / Transaction Reference (Optional)
         </label>
         <input
@@ -145,16 +145,16 @@ export function BookingOutcomeForm({
           placeholder="e.g. IRCTC Transaction ID: TXN109823912"
           value={proofReference}
           onChange={(e) => setProofReference(e.target.value)}
-          className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3 py-2 text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+          className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3 py-2.5 text-ink font-mono placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
         />
-        <p className="text-[11px] text-stone-500 mt-1">
+        <p className="text-[11px] font-mono text-ink-subtle mt-1">
           Reference code only. File uploads are not stored or transmitted without explicit backend support.
         </p>
       </div>
 
       {/* Notes */}
       <div>
-        <label className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
+        <label className="block text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider mb-1.5">
           Booking Notes & Experience
         </label>
         <textarea
@@ -162,21 +162,21 @@ export function BookingOutcomeForm({
           placeholder="e.g. Completed payment via SBI UPI in 42 seconds; Coach B3 Berth 21."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="w-full text-sm bg-white border border-stone-200 rounded-xl px-3 py-2 text-ink placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-accent-emerald"
+          className="w-full text-sm bg-surface-elevated/70 border border-white/10 rounded-xl px-3 py-2.5 text-ink placeholder:text-ink-subtle focus:outline-none focus:ring-2 focus:ring-accent-coral/30 focus:border-accent-coral"
         />
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-2.5 px-4 rounded-xl bg-accent-emerald hover:bg-emerald-800 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-2 focus:ring-accent-emerald focus:ring-offset-2 disabled:opacity-50"
+        className="w-full py-2.5 px-4 rounded-xl bg-accent-coral hover:bg-orange-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-glow-orange transition-all focus:ring-2 focus:ring-accent-coral focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50"
       >
         <Send className="w-4 h-4" />
         <span>{isSubmitting ? 'Recording Outcome...' : 'Save Booking Outcome'}</span>
       </button>
 
-      <div className="flex items-start gap-1.5 text-[11px] text-stone-500 pt-1">
-        <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-2 text-[11px] font-mono text-ink-subtle pt-1">
+        <Info className="w-3.5 h-3.5 shrink-0 mt-0.5 text-accent-coral" />
         <span>
           This records a manually entered outcome for your records. It is flagged as <em>manually recorded</em> and not independently verified against IRCTC databases.
         </span>

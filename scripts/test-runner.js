@@ -27,7 +27,7 @@ console.log('======================================================\n');
 // -----------------------------------------------------------------------------
 // 1. FORM VALIDATION TESTS
 // -----------------------------------------------------------------------------
-console.log('[1/5] Testing Form Validation Rules & Constraints:');
+console.log('[1/4] Testing Form Validation Rules & Constraints:');
 
 test('Rejects empty source or destination stations', () => {
   const validateTrip = (source, dest) => {
@@ -78,7 +78,7 @@ test('Rejects past journey dates', () => {
 // -----------------------------------------------------------------------------
 // 2. COUNTDOWN & SCHEDULER LOGIC TESTS
 // -----------------------------------------------------------------------------
-console.log('\n[2/5] Testing Countdown Calculations & Boundaries:');
+console.log('\n[2/4] Testing Countdown Calculations & Boundaries:');
 
 test('AC class defaults to 10:00 AM IST; Non-AC defaults to 11:00 AM IST', () => {
   const getOpeningTime = (isAC) => (isAC ? '10:00 AM IST' : '11:00 AM IST');
@@ -113,7 +113,7 @@ test('Gracefully transitions to Window Open when countdown reaches zero', () => 
 // -----------------------------------------------------------------------------
 // 3. COMPARISON & RECOMMENDATION PRESENTATION TESTS
 // -----------------------------------------------------------------------------
-console.log('\n[3/5] Testing Comparison Sorting & Presentation Logic:');
+console.log('\n[3/4] Testing Comparison Sorting & Presentation Logic:');
 
 test('Sorts trains by total Tatkal fare (presentation only, preserves Member 4 scoring)', () => {
   const trains = [
@@ -156,7 +156,7 @@ test('Filters train comparisons by travel class', () => {
 // -----------------------------------------------------------------------------
 // 4. BOOKING BOUNDARIES & SAFETY AUDIT
 // -----------------------------------------------------------------------------
-console.log('\n[4/5] Testing Security & Safety Boundaries:');
+console.log('\n[4/4] Testing Security & Safety Boundaries:');
 
 test('Opening IRCTC never mutates trip status or generates synthetic PNR', () => {
   const tripState = { id: 'trip-1', status: 'planned', pnr: undefined };
@@ -182,31 +182,6 @@ test('Validates 10-digit Indian Railways PNR format on manual recording', () => 
 test('Ensures demo mode is transparent and never masquerades as production', () => {
   const demoStatus = { isDemoData: true, sourceExplanation: 'Configured IRCTC standard opening rule' };
   assert.strictEqual(demoStatus.isDemoData, true);
-});
-
-// -----------------------------------------------------------------------------
-// 5. THREEUI INTEGRATION MANIFEST VERIFICATION
-// -----------------------------------------------------------------------------
-console.log('\n[5/5] Testing ThreeUI Manifest & Isolation:');
-
-test('MengToSketchbookLandingPage source files exist locally', () => {
-  const fs = require('fs');
-  const path = require('path');
-  const base = path.resolve(__dirname, '..');
-
-  const files = [
-    'src/shaders/landing-pages/LandingPages.tsx',
-    'src/shaders/landing-pages/pageTypography.ts',
-    'src/shaders/landing-pages/pageRecipes.ts',
-    'src/shaders/landing-pages/LandingPageFrame.tsx',
-    'public/landing-pages/meng-to-sketchbook.html',
-    'src/shaders/threeui.css',
-  ];
-
-  for (const f of files) {
-    const full = path.join(base, f);
-    assert.strictEqual(fs.existsSync(full), true, `Missing required file: ${f}`);
-  }
 });
 
 console.log('\n------------------------------------------------------');

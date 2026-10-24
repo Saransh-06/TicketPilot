@@ -3,7 +3,7 @@ import './globals.css';
 import { AppShell } from '@/components/layout/AppShell';
 
 export const metadata: Metadata = {
-  title: 'Tatkal Assistant — Personal Railway Booking Preparation',
+  title: 'Tatkal Assistant — Railway Command Interface',
   description: 'A thoughtful, accessible personal Indian Railways Tatkal preparation and booking-assistance application with real-time countdown, train comparison, and guided IRCTC readiness.',
   keywords: ['Tatkal Assistant', 'Indian Railways', 'IRCTC preparation', 'train comparison', 'Tatkal countdown'],
 };

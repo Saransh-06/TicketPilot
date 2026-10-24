@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Clock, AlertTriangle, CheckCircle, Info, Sparkles } from 'lucide-react';
+import { Clock, AlertTriangle, CheckCircle, Info, Sparkles, Radio } from 'lucide-react';
 import { SchedulerOpeningInfo } from '@/lib/types';
 import { StatusBadge } from '../ui/StatusBadge';
 
@@ -101,12 +101,12 @@ export function CountdownWidget({
 
   if (!schedulerInfo) {
     return (
-      <div className={`p-6 rounded-2xl bg-stone-50 border border-stone-200 text-stone-600 ${className}`}>
+      <div className={`p-6 rounded-2xl bg-surface-dim border border-white/10 text-ink-muted relative overflow-hidden ${className}`}>
         <div className="flex items-center gap-2 mb-2">
-          <Clock className="w-5 h-5 text-stone-400" />
-          <h3 className="font-semibold text-stone-700">Opening Time Unavailable</h3>
+          <Clock className="w-5 h-5 text-accent-coral" />
+          <h3 className="font-semibold text-ink text-sm">Opening Time Unavailable</h3>
         </div>
-        <p className="text-sm">
+        <p className="text-xs text-ink-subtle">
           Awaiting trip selection or sync with Member 3 Scheduler module to receive authoritative opening timestamp.
         </p>
       </div>
@@ -126,28 +126,49 @@ export function CountdownWidget({
       aria-label="Tatkal Booking Opening Countdown"
       className={`relative overflow-hidden rounded-2xl p-6 border transition-all ${
         time.isExpired
-          ? 'bg-emerald-50/90 border-emerald-300 text-emerald-950'
+          ? 'bg-emerald-950/25 border-emerald-500/40 text-emerald-200 shadow-glow-emerald'
           : isWithin5Min
-          ? 'bg-amber-50/90 border-amber-300 text-amber-950 shadow-glass-hover'
-          : 'bg-white/80 border-glass-border shadow-glass'
+          ? 'bg-amber-950/20 border-accent-coral/50 text-ink shadow-glow-orange'
+          : 'bg-surface/85 backdrop-blur-md border-white/10 shadow-glass'
       } ${className}`}
     >
+      {/* Visual Accent Top Bar */}
+      <div
+        className={`absolute top-0 left-0 right-0 h-0.5 ${
+          time.isExpired
+            ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-transparent'
+            : isWithin5Min
+            ? 'bg-gradient-to-r from-accent-coral via-amber-400 to-transparent'
+            : 'bg-gradient-to-r from-accent-coral/60 via-emerald-500/40 to-transparent'
+        }`}
+      />
+
       {/* Hidden ARIA Live region for non-intrusive screen reader updates */}
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {announcedMessage}
       </div>
 
       {/* Header Info */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="section-idx">[01 // CHRONO.SYNC]</span>
+            <span className="flex items-center gap-1.5 font-mono text-[0.625rem] text-accent-emerald uppercase tracking-wider">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              REALTIME
+            </span>
+          </div>
           <div className="flex items-center gap-2">
-            <Clock className={`w-5 h-5 ${time.isExpired ? 'text-emerald-700' : 'text-accent-emerald'}`} aria-hidden="true" />
-            <h3 className="font-semibold text-ink text-base">
+            <Clock className={`w-4 h-4 ${time.isExpired ? 'text-emerald-400' : 'text-accent-coral'}`} aria-hidden="true" />
+            <h3 className="font-bold text-ink text-base sm:text-lg tracking-tight">
               {time.isExpired ? 'Tatkal Booking Window Open' : 'Tatkal Opening Countdown'}
             </h3>
           </div>
-          <p className="text-xs text-ink-muted mt-0.5">
-            {journeyTitle} • <span className="font-medium">{travelClass} ({isAC ? 'AC Quota' : 'Non-AC Quota'})</span>
+          <p className="text-xs text-ink-muted mt-0.5 font-mono">
+            {journeyTitle} • <span className="text-ink font-semibold">{travelClass} ({isAC ? 'AC Quota' : 'Non-AC Quota'})</span>
           </p>
         </div>
 
@@ -166,69 +187,104 @@ export function CountdownWidget({
 
       {/* Countdown Digits */}
       {time.isExpired ? (
-        <div className="py-4 px-5 rounded-xl bg-emerald-100/80 border border-emerald-300 text-center">
-          <div className="flex items-center justify-center gap-2 text-emerald-800 font-bold text-lg mb-1">
-            <CheckCircle className="w-5 h-5" aria-hidden="true" />
-            Official Booking Active on IRCTC
+        <div className="py-5 px-6 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center">
+          <div className="flex items-center justify-center gap-2 text-emerald-400 font-bold text-lg mb-1">
+            <CheckCircle className="w-5 h-5 text-emerald-400" aria-hidden="true" />
+            <span>Official Booking Active on IRCTC</span>
           </div>
-          <p className="text-xs text-emerald-700">
+          <p className="text-xs text-emerald-300/90 font-mono">
             The configured opening threshold ({openTimeIST}) has passed. Proceed immediately to the official IRCTC portal.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-2 sm:gap-4 my-3 text-center">
-          <div className="bg-white/90 border border-stone-200/90 rounded-xl p-2.5 sm:p-3 shadow-xs">
-            <span className="block text-2xl sm:text-3xl font-extrabold text-ink font-mono tracking-tight">
+        <div className="grid grid-cols-4 gap-2 sm:gap-3.5 my-4 text-center">
+          {/* Days */}
+          <div className="bg-surface-elevated/80 border border-white/10 border-t-white/20 rounded-xl p-3 sm:p-4 shadow-sm relative overflow-hidden group">
+            <div className="flex items-center justify-between text-[9px] font-mono text-ink-subtle mb-1">
+              <span>[DD]</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+            </div>
+            <span className="block text-2xl sm:text-4xl font-black text-ink font-mono tabular-nums tracking-tight group-hover:text-accent-coral transition-colors">
               {String(time.days).padStart(2, '0')}
             </span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Days</span>
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-ink-muted mt-1 block">
+              Days
+            </span>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/5" />
           </div>
-          <div className="bg-white/90 border border-stone-200/90 rounded-xl p-2.5 sm:p-3 shadow-xs">
-            <span className="block text-2xl sm:text-3xl font-extrabold text-ink font-mono tracking-tight">
+
+          {/* Hours */}
+          <div className="bg-surface-elevated/80 border border-white/10 border-t-white/20 rounded-xl p-3 sm:p-4 shadow-sm relative overflow-hidden group">
+            <div className="flex items-center justify-between text-[9px] font-mono text-ink-subtle mb-1">
+              <span>[HH]</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+            </div>
+            <span className="block text-2xl sm:text-4xl font-black text-ink font-mono tabular-nums tracking-tight group-hover:text-accent-coral transition-colors">
               {String(time.hours).padStart(2, '0')}
             </span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Hours</span>
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-ink-muted mt-1 block">
+              Hours
+            </span>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/5" />
           </div>
-          <div className="bg-white/90 border border-stone-200/90 rounded-xl p-2.5 sm:p-3 shadow-xs">
-            <span className="block text-2xl sm:text-3xl font-extrabold text-ink font-mono tracking-tight">
+
+          {/* Minutes */}
+          <div className="bg-surface-elevated/80 border border-white/10 border-t-white/20 rounded-xl p-3 sm:p-4 shadow-sm relative overflow-hidden group">
+            <div className="flex items-center justify-between text-[9px] font-mono text-ink-subtle mb-1">
+              <span>[MM]</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+            </div>
+            <span className="block text-2xl sm:text-4xl font-black text-ink font-mono tabular-nums tracking-tight group-hover:text-accent-coral transition-colors">
               {String(time.minutes).padStart(2, '0')}
             </span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Minutes</span>
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-ink-muted mt-1 block">
+              Minutes
+            </span>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/5" />
           </div>
-          <div className="bg-white/90 border border-stone-200/90 rounded-xl p-2.5 sm:p-3 shadow-xs">
-            <span className="block text-2xl sm:text-3xl font-extrabold text-accent-emerald font-mono tracking-tight">
+
+          {/* Seconds */}
+          <div className="bg-surface-elevated/80 border border-accent-emerald/30 border-t-emerald-400/30 rounded-xl p-3 sm:p-4 shadow-sm relative overflow-hidden group bg-emerald-500/5">
+            <div className="flex items-center justify-between text-[9px] font-mono text-accent-emerald/80 mb-1">
+              <span>[SS]</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse" />
+            </div>
+            <span className="block text-2xl sm:text-4xl font-black text-accent-emerald font-mono tabular-nums tracking-tight">
               {String(time.seconds).padStart(2, '0')}
             </span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-muted">Seconds</span>
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-accent-emerald mt-1 block font-semibold">
+              Seconds
+            </span>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-emerald/40" />
           </div>
         </div>
       )}
 
       {/* Target Timestamp & Timezone Notice */}
-      <div className="mt-4 pt-3 border-t border-stone-200/70 flex flex-wrap items-center justify-between text-xs text-ink-muted gap-2">
+      <div className="mt-4 pt-3.5 border-t border-white/8 flex flex-wrap items-center justify-between text-xs text-ink-muted gap-2 font-mono">
         <span>
-          Target: <strong className="text-ink">{openTimeIST}</strong> on {schedulerInfo.openingTimestampIST.slice(0, 10)}
+          Target: <strong className="text-ink font-semibold">{openTimeIST}</strong> on {schedulerInfo.openingTimestampIST.slice(0, 10)}
         </span>
-        <span className="flex items-center gap-1 text-stone-500">
-          <Info className="w-3.5 h-3.5" aria-hidden="true" />
+        <span className="flex items-center gap-1.5 text-ink-subtle">
+          <Info className="w-3.5 h-3.5 text-accent-coral" aria-hidden="true" />
           Indian Standard Time (UTC+05:30)
         </span>
       </div>
 
       {/* Origin Date Notice */}
       {schedulerInfo.originDateNotice && (
-        <div className="mt-2 text-[11px] text-amber-800/90 bg-amber-50/80 p-2 rounded-lg border border-amber-200 flex items-start gap-1.5">
-          <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0 text-amber-700" aria-hidden="true" />
+        <div className="mt-3 text-xs text-amber-300 bg-amber-500/10 p-3 rounded-xl border border-amber-500/20 flex items-start gap-2">
+          <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0 text-amber-400" aria-hidden="true" />
           <span>{schedulerInfo.originDateNotice}</span>
         </div>
       )}
 
       {/* Readiness Alert when < 15 minutes */}
       {isWithin15Min && !time.isExpired && (
-        <div className="mt-3 p-3 rounded-xl bg-amber-100/90 border border-amber-300 text-amber-950 text-xs flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-amber-700 shrink-0" aria-hidden="true" />
-          <span>
-            <strong>Preparation Window Active:</strong> Log into IRCTC now, verify Master Passenger list is saved, and keep payment instrument ready.
+        <div className="mt-3 p-3.5 rounded-xl bg-accent-coral/10 border border-accent-coral/30 text-ink text-xs flex items-center gap-2.5">
+          <Sparkles className="w-4 h-4 text-accent-coral shrink-0" aria-hidden="true" />
+          <span className="leading-relaxed">
+            <strong className="text-accent-coral">Preparation Window Active:</strong> Log into IRCTC now, verify Master Passenger list is saved, and keep payment instrument ready.
           </span>
         </div>
       )}

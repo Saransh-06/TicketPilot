@@ -8,8 +8,6 @@ const routes = [
   '/booking',
   '/history',
   '/settings',
-  '/threeui-preview',
-  '/landing-pages/meng-to-sketchbook.html',
 ];
 
 async function checkRoute(route) {
