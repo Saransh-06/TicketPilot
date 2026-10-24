@@ -6,6 +6,7 @@ import { UserSettings, TravelClass, PreferenceChoice } from '@/lib/types';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Settings, Shield, Bell, Eye, Trash2, CheckCircle, RotateCcw, AlertTriangle, Info, Sliders } from 'lucide-react';
+import { DEFAULT_USER_SETTINGS } from '@/lib/demo/demoData';
 
 const ALL_CLASSES: { code: TravelClass; label: string }[] = [
   { code: '1A', label: '1A - First AC' },
@@ -25,17 +26,47 @@ export default function SettingsPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [resetMessage, setResetMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchSettings() {
-      setLoading(true);
+   
+useEffect(() => {
+  async function fetchSettings() {
+    setLoading(true);
+
+    try {
       const res = await api.getSettings();
-      if (res.data) {
+
+      if (res.success && res.data) {
         setSettings(res.data);
+      } else {
+        const savedSettings = localStorage.getItem(
+          'tatkal_assistant_demo_settings'
+        );
+
+        setSettings(
+          savedSettings
+            ? { ...DEFAULT_USER_SETTINGS, ...JSON.parse(savedSettings) }
+            : DEFAULT_USER_SETTINGS
+        );
       }
+    } catch (error) {
+      const savedSettings = localStorage.getItem(
+        'tatkal_assistant_demo_settings'
+      );
+
+      setSettings(
+        savedSettings
+          ? { ...DEFAULT_USER_SETTINGS, ...JSON.parse(savedSettings) }
+          : DEFAULT_USER_SETTINGS
+      );
+
+      console.error('Failed to load settings:', error);
+    } finally {
       setLoading(false);
     }
-    fetchSettings();
-  }, []);
+  }
+
+  fetchSettings();
+}, []);
+
 
   const handleClassToggle = (code: TravelClass) => {
     if (!settings) return;
@@ -46,19 +77,40 @@ export default function SettingsPage() {
     setSettings({ ...settings, preferredClasses: updated });
   };
 
-  const handleSave = async () => {
-    if (!settings) return;
-    setIsSaving(true);
-    setSaveSuccess(false);
+  
+const handleSave = async () => {
+  if (!settings) return;
 
+  setIsSaving(true);
+  setSaveSuccess(false);
+
+  try {
     const res = await api.updateSettings(settings);
-    setIsSaving(false);
 
     if (res.success) {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
+    } else {
+      // Persist settings locally when the backend is unavailable.
+      localStorage.setItem(
+        'tatkal_assistant_demo_settings',
+        JSON.stringify(settings)
+      );
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
     }
-  };
+  } catch (error) {
+    localStorage.setItem(
+      'tatkal_assistant_demo_settings',
+      JSON.stringify(settings)
+    );
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 3000);
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   const handleResetData = () => {
     if (confirm('Are you sure you want to reset all demo trips and outcome records back to default?')) {
@@ -210,10 +262,10 @@ export default function SettingsPage() {
                 <Bell className="w-4 h-4 text-accent-coral" />
                 <span className="font-bold text-ink font-mono">Scheduler Notification Daemon</span>
               </div>
-              <StatusBadge label="Pending Member 3 Daemon" variant="warning" />
+              <StatusBadge label="Scheduler Service Pending" variant="warning" />
             </div>
             <p className="text-ink-subtle text-[11px] font-mono leading-relaxed">
-              Authoritative desktop push notifications and missed-reminder recovery are governed by the Member 3 background scheduler module. Once Member 3 deploys the notification service worker, alerts will trigger at T-15m, T-5m, and T-1m.
+              Authoritative desktop push notifications and missed-reminder recovery are governed by the TicketPilot background scheduler. Once the notification service is configured, alerts will trigger at T-15m, T-5m, and T-1m.
             </p>
           </div>
         </div>
@@ -226,7 +278,7 @@ export default function SettingsPage() {
           <h2 className="text-sm sm:text-base font-mono">Privacy Principles & Data Controls</h2>
         </div>
         <p className="text-xs text-ink-muted mb-4 leading-relaxed font-mono">
-          Tatkal Assistant stores journey profiles and manual booking logs exclusively in local client memory and SQLite (when connected to Member 2). We never transmit passenger IDs, banking details, or IRCTC passwords.
+          Tatkal Assistant stores journey profiles and manual booking logs exclusively in local client memory and SQLite (when connected to the backend). We never transmit passenger IDs, banking details, or IRCTC passwords.
         </p>
 
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/8">

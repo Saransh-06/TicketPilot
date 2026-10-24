@@ -125,7 +125,7 @@ export default function BookingHistoryPage() {
                   {item.isManuallyRecorded ? (
                     <StatusBadge label="Manually Recorded" variant="neutral" hint="Logged by user" />
                   ) : (
-                    <StatusBadge label="API Verified" variant="success" hint="Verified with Member 2 backend" />
+                    <StatusBadge label="Backend Recorded" variant="neutral" hint="Record retrieved from the backend" />
                   )}
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default function BookingHistoryPage() {
           <span>Outcome Audit & Verification Boundaries</span>
         </div>
         <p className="leading-relaxed text-[11px] text-ink-subtle">
-          Outcomes listed in this personal travel history reflect manual entries logged by the user or responses recorded from Member 2 SQLite storage. Tatkal Assistant does not perform automated scraping of live IRCTC accounts or infer payment confirmation without user input.
+          Outcomes listed in this personal travel history reflect manual entries logged by the user or responses recorded in local application storage. Tatkal Assistant does not perform automated scraping of live IRCTC accounts or infer payment confirmation without user input.
         </p>
       </div>
     </div>

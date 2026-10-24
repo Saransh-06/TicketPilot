@@ -74,12 +74,12 @@ export default function CompareTrainsPage() {
           <div className="flex items-center gap-2 mb-1">
             <span className="section-idx">[03 // TIMETABLES]</span>
             <span className="text-[10px] font-mono text-ink-subtle uppercase tracking-wider">
-              MEMBER 4 SCORING ENGINE
+              TRAIN COMPARISON ENGINE
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">Train Timetable & Fare Comparison</h1>
           <p className="text-xs sm:text-sm text-ink-muted mt-0.5">
-            Authorized schedule data and recommendation explanations powered by Member 4 Comparison Engine.
+            Train schedules and recommendation explanations powered by the TicketPilot comparison engine.
           </p>
         </div>
 
@@ -113,7 +113,7 @@ export default function CompareTrainsPage() {
 
         <div className="flex items-center gap-2">
           <StatusBadge label={`Class: ${currentTrip.travelClass}`} variant="info" />
-          <StatusBadge label="Member 4 Scoring Active" variant="success" />
+          <StatusBadge label="Comparison Engine Active" variant="success" />
         </div>
       </div>
 

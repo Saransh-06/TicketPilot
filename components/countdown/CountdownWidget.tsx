@@ -107,7 +107,7 @@ export function CountdownWidget({
           <h3 className="font-semibold text-ink text-sm">Opening Time Unavailable</h3>
         </div>
         <p className="text-xs text-ink-subtle">
-          Awaiting trip selection or sync with Member 3 Scheduler module to receive authoritative opening timestamp.
+          Awaiting trip selection or sync with the TicketPilot scheduler service to receive authoritative opening timestamp.
         </p>
       </div>
     );
@@ -178,9 +178,9 @@ export function CountdownWidget({
             variant={isAC ? 'ac' : 'nonac'}
           />
           {schedulerInfo.isAuthoritative ? (
-            <StatusBadge label="Member 3 Verified" variant="success" hint="Calculated by Scheduler module" />
+            <StatusBadge label="Scheduler Status" variant="warning" hint="Scheduler integration is pending" />
           ) : (
-            <StatusBadge label="Configured Default" variant="warning" hint="Awaiting Member 3 origin verification" />
+            <StatusBadge label="Configured Default" variant="warning" hint="Awaiting origin verification" />
           )}
         </div>
       </div>

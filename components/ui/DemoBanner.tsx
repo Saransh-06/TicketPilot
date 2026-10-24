@@ -36,13 +36,13 @@ export function DemoBanner() {
           ) : (
             <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/15 font-mono font-semibold text-emerald-300 border border-emerald-500/25 text-[0.625rem] tracking-wider">
               <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
-              CONNECTED TO MEMBER 2 BACKEND
+              CONNECTED TO FASTAPI BACKEND
             </span>
           )}
           <span className="text-ink-muted">
             {isDemo
               ? 'Using client-side transparent demo storage. Official IRCTC booking is user-controlled; no live booking credentials or bank secrets are ever collected.'
-              : 'Production API active. Member 2 Express & SQLite endpoints in use.'}
+              : 'TicketPilot API connected. FastAPI backend active on port 8000.'}
           </span>
         </div>
 

@@ -3,7 +3,7 @@
  * Member 1: Frontend & UI Architecture
  * 
  * Supports both:
- * 1. Live Express backend integration (Member 2 endpoints)
+ * 1. FastAPI backend integration (TicketPilot API endpoints)
  * 2. Transparent, explicit Demo adapter with persistent client-side state
  * 
  * CRITICAL RULE: Never silently fallback to mock data on real API network error!
@@ -271,7 +271,7 @@ class ApiClient {
   }
 
   // ==========================================
-  // Scheduler / Countdown Endpoints (Member 3)
+  // Scheduler / Countdown Endpoints
   // ==========================================
 
   public async getSchedulerStatus(tripId: string): Promise<ApiResponse<SchedulerOpeningInfo>> {
@@ -288,30 +288,90 @@ class ApiClient {
   }
 
   // ==========================================
-  // Train Comparison & Recommendations (Member 4)
+  // Train Comparison & Recommendations
   // ==========================================
 
   public async getTrainComparisons(
-    sourceStation: string,
-    destStation: string,
-    travelClass?: TravelClass
-  ): Promise<ApiResponse<TrainComparisonResult[]>> {
-    if (this.isDemo) {
-      let list = DEMO_COMPARISONS['NDLS_BCT'] || [];
-      if (travelClass) {
-        list = list.filter(t => t.travelClass === travelClass);
-      }
-      return { success: true, data: list, isDemoData: true };
+  sourceStation: string,
+  destStation: string,
+  travelClass?: TravelClass
+): Promise<ApiResponse<TrainComparisonResult[]>> {
+  if (this.isDemo) {
+    let list = DEMO_COMPARISONS['NDLS_BCT'] || [];
+    if (travelClass) {
+      list = list.filter(t => t.travelClass === travelClass);
     }
-
-    const query = new URLSearchParams({
-      source: sourceStation,
-      destination: destStation,
-      ...(travelClass ? { class: travelClass } : {}),
-    });
-
-    return this.request<TrainComparisonResult[]>(`/trains/compare?${query.toString()}`);
+    return { success: true, data: list, isDemoData: true };
   }
+
+  const travelDate = new Date();
+  travelDate.setDate(travelDate.getDate() + 1);
+  const formattedDate = [
+    travelDate.getFullYear(),
+    String(travelDate.getMonth() + 1).padStart(2, '0'),
+    String(travelDate.getDate()).padStart(2, '0'),
+  ].join('-');
+
+  const response = await this.request<any>('/trains/compare', {
+    method: 'POST',
+    body: JSON.stringify({
+      source_station: sourceStation,
+      destination_station: destStation,
+      travel_date: formattedDate,
+      travel_class: travelClass,
+      quota: 'TATKAL',
+    }),
+  });
+
+  if (!response.success) {
+    return {
+      success: false,
+      error: response.error,
+      isDemoData: false,
+    };
+  }
+
+  const payload = response.data as any;
+  const candidates = Array.isArray(payload?.candidates) ? payload.candidates : [];
+
+  const mapped: TrainComparisonResult[] = candidates.map((candidate: any) => {
+    const durationMinutes = candidate.metadata?.duration_minutes;
+    const fare = typeof candidate.fare === 'number' ? candidate.fare : 0;
+
+    return {
+      trainNumber: String(candidate.train_number ?? ''),
+      trainName: candidate.train_name ?? 'Train name unavailable',
+      originStation: sourceStation,
+      destinationStation: destStation,
+      departureTime: candidate.departure_time ?? 'Unavailable',
+      arrivalTime: candidate.arrival_time ?? 'Unavailable',
+      duration: typeof durationMinutes === 'number'
+        ? `${Math.floor(durationMinutes / 60)}h ${durationMinutes % 60}m`
+        : 'Unavailable',
+      durationMinutes: typeof durationMinutes === 'number' ? durationMinutes : 0,
+      travelClass: (travelClass ?? candidate.available_classes?.[0] ?? '3A') as TravelClass,
+      baseFare: fare,
+      tatkalCharge: 0,
+      totalFare: fare,
+      availabilityStatus: candidate.availability_status ?? 'Availability unverified',
+      dataProvenance: 'estimated',
+      freshnessTimestamp: 'Source timestamp unavailable',
+      recommendation: candidate.metadata?.is_selected
+        ? {
+            badge: 'TOP_RECOMMENDATION',
+            reason: 'Selected by the train comparison ranking engine',
+            engineProvenance: 'TicketPilot Comparison Engine',
+          }
+        : undefined,
+    };
+  });
+
+  return {
+    success: true,
+    data: mapped,
+    isDemoData: false,
+  };
+}
 
   // ==========================================
   // Booking Outcomes & History
