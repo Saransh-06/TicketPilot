@@ -1,9 +1,0 @@
-node_modules/
-logs/
-data/
-.env
-.env.*
-!.env.example
-.DS_Store
-Thumbs.db
-config.json
